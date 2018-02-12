@@ -1,3 +1,86 @@
+// Other
+
+const findIsland = (arr=[[0,0,0,0, 0], [0,1,1,1,0],[0,1,1,1,0],[0,0,0,0,0]]) => {
+  let topLeft;
+  
+  const islandSearch = (i, j) => {
+      let width = i;
+      let height = j;
+      
+      let currentWidth = i;
+      while(arr[currentWidth] && arr[currentWidth][j] !== 0) {
+        currentWidth++;
+      }
+      
+      let currentHeight = j;
+      while(arr[i][currentHeight] !== 0 && arr[i][currentHeight] !== undefined) {
+        console.log(arr[i][currentHeight]);
+        currentHeight++;
+      }
+      
+      return [currentWidth - i, currentHeight - j];
+  };
+  
+  for(let i = 0; i < arr.length; i++) {
+    for(let j = 0; j < arr[i].length; j++) {
+      if(arr[i][j] === 1) {
+        topLeft = [i, j];
+        return {topLeft, size: islandSearch(i,j)};
+        
+      }
+    }
+  }
+};
+
+const findIsland = (arr=[[0,1,0], [0,1,0],[1,0,1]]) => {
+  let markedIsland = {};
+  let numberIslands = 0;
+
+  const findSurrounding = (i,j) => {
+    //checktop
+    if(!markedIsland[i]) {
+      markedIsland[i] = {}
+    }
+    
+    markedIsland[i][j] = true;
+    
+    if(arr[i-1] && arr[i-1][j] && arr[i-1][j] === 1 && (!markedIsland[i-1] || markedIsland[i-1][j] === false)) {
+      findSurrounding(i-1, j);
+    }
+    if(arr[i+1] && arr[i+1][j] && arr[i+1][j] === 1 && (!markedIsland[i+1] || markedIsland[i+1][j] === false)) {
+      findSurrounding(i+1, j);
+    }
+    if(arr[i] && arr[i][j-1] && arr[i][j-1] === 1 && (!markedIsland[i][j-1] || markedIsland[i][j-1] === false)) {
+      findSurrounding(i, j-1);
+    }
+    if(arr[i] && arr[i][j+1] && arr[i][j+1] === 1 && (!markedIsland[i][j+1] || markedIsland[i][j+1] === false)) {
+      findSurrounding(i, j+1);
+    }
+    
+    return;
+    
+  }
+  
+  for(let i = 0; i < arr.length; i++) {
+    for(let j = 0; j < arr[i].length; j++) {
+      if(arr[i][j] === 1 && (!markedIsland[i] || !markedIsland[i][j])) {
+        if(!markedIsland[i]) {
+          markedIsland[i] = {}
+        }
+        markedIsland[i][j] = true;
+        numberIslands++;
+        findSurrounding(i, j)
+      }
+    }
+  }
+  
+  return numberIslands;
+  
+  
+  
+  
+};
+
 // Chapter 1 Arrays and Strings
 
 const allUniqueChars = (string) => {
@@ -239,7 +322,7 @@ const zeroMatrix = (matrix =[[1, 0,1,2],[2,1,1,0],[3,4,5,6]]) => {
 
 
 // Chapter 2: Linked List
-class LinkedList() {
+class LinkedList {
 
   constructor() {
     this.head = null;
@@ -287,3 +370,209 @@ class LinkedList() {
     return node;
   }
 }
+
+class LinkedList {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+  }
+
+  removeDuplicates() {
+    
+    let current = this.head;
+    let prev;
+    let hash = {};
+    
+    while(current !==null) {
+      if(hash[current.value]) {
+        this.removeNode(prev, current);
+      } else {
+        hash[current.value] = true;
+      }
+      prev = current;
+      current = current.next;
+    }
+  }
+  
+  removeDuplicatesNoBuffer() {
+    
+    let current = this.head;
+    let checker;
+    
+    while(current !==null) {
+      let checker = current.next;
+      let prevChecker = current;
+      while(checker !== null) {
+        if (checker.value === current.value) {
+          this.removeNode(prevChecker, checker);
+        } 
+        prevChecker = checker;
+        checker = checker.next;
+      }
+      current = current.next;
+    }
+    
+  }
+  
+   
+  removeKthLastRecursive(k, node, i) {
+    console.log(k, node);
+    
+    if(node === undefined) {
+      return this.removeKthLastRecursive(k, this.head);
+    }
+    if(node === null) {
+      return 0;
+    } else {
+      let value = this.removeKthLastRecursive(k, node.next, i)
+      if(value === k) {
+        return node.next;
+      }
+      
+      if(typeof value !== 'number') {
+        return value;
+      }
+      return value + 1;
+     
+    }
+  }
+   
+  removeKthLast(k) {
+    let number = 0;
+    
+    let current = this.head;
+    while(current !== null) {
+      number++;
+      current = current.next; 
+    }
+    
+    let end = number - k + 1;
+    let curr = this.head;
+    let prev;
+    
+    while(end !== 0) {
+      prev = curr;
+      curr = curr.next;
+      end--;
+    }
+    
+    return curr;
+  }
+  
+  removeNode(prev, current) {
+    // refactor, you only need previous node and can see current by doing prev.next and setting prev.next to prev.next.next
+    console.log(prev, current);
+    prev.next = current.next;
+    if(current.next === null) {
+      this.tail = prev;
+    }
+  }
+  
+  addToTail(value) {
+    if (this.tail) {
+      this.tail.next = this.makeNode(value);
+      this.tail = this.tail.next;
+    } else {
+      this.tail = this.makeNode(value);
+      this.head = this.tail;
+    }
+  }
+
+  removeHead() {
+    if (this.head) {
+      let oldHead = this.head;
+      this.head = this.head.next;
+      if (this.head === null) {
+        this.tail = null;
+      }
+      return oldHead;
+    }
+    return null;
+  }
+
+  deleteMiddleNode(node) {
+    let current = node;
+    if(current.next === null) {
+      current = null;
+    } else {
+    current.value = current.next.value;
+    current.next = current.next.next;
+    }
+  }
+  
+  reverseLinkedList() {
+    
+    let prev = this.head;
+    let mid = prev.next;
+    let end = mid.next;
+    
+    prev.next = null;
+    while (prev !== null) {
+      if(mid === null) {
+        this.head = prev;
+      } else if(end === null) {
+        this.head = mid;
+      }
+      mid.next = prev;
+      
+      prev = end && end.next ? end.next : null;
+      if(end) {
+        end.next = mid;
+      }
+      mid = prev && prev.next ? prev.next : null;
+      end = mid && mid.next ? mid.next : null;
+    }
+  }
+  
+  printValues() {
+    let current = this.head;
+    while(current !== null) {
+      console.log(current.value);
+      current = current.next;
+    }
+    
+  }
+  
+  partitionList(number){
+    let beg = new LinkedList();
+    let end = new LinkedList();
+    let current = this.head;
+    while (current !== null) {
+      if(current.value < number) {
+        beg.addToTail(current);
+      } else {
+        end.addToTail(current);
+      }
+      current = current.next;
+    }
+    //needs an add to tail that can add multiple items, but same concept.
+    beg.addToTail(end.head)
+    return beg;
+  }
+
+  contains(value) {
+    let current = this.head;
+    while(current !== null) {
+      if(current.value === value) {
+        return true;
+      }
+      current = current.next;
+    }
+
+    return false;
+  }
+
+  makeNode(value) {
+    let node = {};
+    node.value = value;
+    node.next = null;
+    return node;
+  }
+}
+
+let ll = new LinkedList();
+ll.addToTail(5);
+ll.addToTail(4);
+ll.addToTail(3);
+ll.addToTail(2);
+ll.addToTail(1);
