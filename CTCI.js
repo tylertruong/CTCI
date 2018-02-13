@@ -571,8 +571,58 @@ class LinkedList {
 }
 
 let ll = new LinkedList();
-ll.addToTail(5);
-ll.addToTail(4);
-ll.addToTail(3);
-ll.addToTail(2);
-ll.addToTail(1);
+ll.addToTail(9);
+ll.addToTail(7);
+ll.addToTail(8);
+
+
+let aa = new LinkedList();
+aa.addToTail(6);
+aa.addToTail(8);
+aa.addToTail(5);
+
+const sumLL = (ll1, ll2) => {
+  let summedValues = new LinkedList();  
+  
+  const sumList = (ll1, ll2, remainder=0) => {
+
+    if(ll1 === null && ll2 === null) {
+      if(remainder) {
+        summedValues.addToTail(remainder);
+      }
+      return;
+    }
+    
+    if(ll1 === null) {
+      let total = ll2.value + remainder;
+      
+      summedValues.addToTail(total >= 10 ? total - 10 : total);
+      sumList(null, ll2.next, total >= 10 ? 1 : 0 );
+      return;
+    }
+    
+    if(ll2 === null) {
+      let total = ll1.value + remainder;
+      
+      summedValues.addToTail(total >= 10 ? total - 10 : total);
+      sumList(null, ll1.next, total >= 10 ? 1 : 0 );
+      return;
+    }
+
+    let total = ll1.value + ll2.value + reaminder;
+    summedValues.addToTail(total >= 10 ? total - 10 : total);
+    sumList(ll1.next, ll2.next, total >= 10 ? 1 : 0 );
+    return;
+    
+  }
+  
+  sumList(ll1.head, ll2.head);
+  
+  return summedValues;
+
+}
+
+
+
+
+
