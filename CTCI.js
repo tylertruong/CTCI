@@ -568,13 +568,24 @@ class LinkedList {
     node.next = null;
     return node;
   }
+  
+  makeCopy() {
+    let ll = new LinkedList();
+    let current = this.head;
+    while(current !== null) {
+      ll.addToTail(current.value);
+      current = current.next;
+    }
+    return ll;
+  }
 }
 
 let ll = new LinkedList();
 ll.addToTail(9);
 ll.addToTail(7);
 ll.addToTail(8);
-
+ll.addToTail(7);
+ll.addToTail(9);
 
 let aa = new LinkedList();
 aa.addToTail(6);
@@ -624,5 +635,49 @@ const sumLL = (ll1, ll2) => {
 
 
 
+const reverseLinkedList = (ll) =>  {
+    
+    let prev = ll.head;
+    let mid = prev.next;
+    let end = mid.next;
+    
+    prev.next = null;
+    while (prev !== null) {
+      if(mid === null) {
+        this.head = prev;
+      } else if(end === null) {
+        this.head = mid;
+      }
+      mid.next = prev;
+      
+      prev = end && end.next ? end.next : null;
+      if(end) {
+        end.next = mid;
+      }
+      mid = prev && prev.next ? prev.next : null;
+      end = mid && mid.next ? mid.next : null;
+    }
+    console.log(ll);
+
+    return ll;
+}
+
+const isPalindrome = (ll) =>{
+  let bb = reverseLinkedList(ll.makeCopy());
+  
+  let current = ll.head;
+  let current2 = bb.head;
+  ll.printValues();
+  console.log('---------')
+  bb.printValues();
+  while(current !== null) {
+    if(current.value !== current2.value) {
+      return false;
+    }
+    current = current.next;
+    current2 = current2.next;
+  }
+  return true;
+}
 
 
