@@ -681,3 +681,100 @@ const isPalindrome = (ll) =>{
 }
 
 
+// Chapter 3 Stacks and Queues
+class Stack {
+  constructor() {
+    this.stack = [];
+    this.minValues = [];
+    this.length = 0;
+  }
+  
+  push(value) {
+    this.stack = this.stack.concat(value);
+    if(this.minValues[this.minValues.length - 1] 
+    && this.minValues[this.minValues.length - 1] < value) {
+      this.minValues = this.minValues.concat(this.minValues[this.minValues.length - 1]);
+    } else {
+      this.minValues = this.minValues.concat(value)
+    }
+    this.length++;
+    return value;
+  }
+  
+  pop() {
+    if(this.size() > 0) {
+      let popValue = this.stack[this.stack.length - 1];
+      this.stack = this.stack.slice(0, this.stack.length - 1);
+      this.minValues = this.minValues.slice(0, this.minValues.length - 1);
+      this.length--;
+      return popValue;
+    }
+    return null;
+  }
+  
+  size() {
+    return this.length;
+  }
+  
+  peek() {
+    return this.stack[this.stack.length - 1];
+  }
+  
+  min() {
+    return this.minValues[this.minValues.length - 1];
+  }
+}
+
+class SetOfStacks {
+  constructor(capacity) {
+    this.capacity = capacity;
+    this.stackCounter = 0;
+    this.hash = {};
+    this.hash[0] = new Stack();
+  }
+  
+  increaseSize(){
+    this.stackCounter++;
+    if(!this.hash[this.stackCounter]) {
+      this.hash[this.stackCounter] = new Stack();
+    } else {
+      while(this.hash[this.stackCounter] && this.hash[this.stackCounter].size() === capacity) {
+        this.stackCounter++;
+      }
+      if (!this.hash[this.stackCounter]) {
+        this.hash[this.stackCounter] = new Stack();
+      }
+    }
+  }
+  
+  push(value) {
+    if (this.hash[this.stackCounter].size() >= this.capacity) {
+      this.increaseSize();
+    }
+    this.hash[this.stackCounter].push(value);
+    return value;
+  }
+  
+  pop(value) {
+    let popValue = this.hash[this.stackCounter].peek();
+    this.hash[this.stackCounter].pop();
+    if(this.hash[this.stackCounter].size() <= 0) {
+      this.stackCounter--;
+    }
+    return popValue;
+  }
+  
+  popAt(index) {
+    this.hash[index].pop();
+    this.stackCounter = index;
+  }
+  
+}
+
+let stack = new SetOfStacks(3);
+stack.push(1);
+stack.push(2);
+stack.push(3);
+stack.push(4);
+stack.push(5);
+stack.push(6);
