@@ -771,10 +771,130 @@ class SetOfStacks {
   
 }
 
-let stack = new SetOfStacks(3);
-stack.push(1);
-stack.push(2);
-stack.push(3);
-stack.push(4);
-stack.push(5);
-stack.push(6);
+class Queue {
+  constructor() {
+    this.stack1 = new Stack();
+    this.stack2 = new Stack();
+    this.size = 0;
+  }
+  
+  add(value) {
+    this.size++;
+    this.stack1.push(value)
+  }
+  
+  remove(){
+    this.size--;
+    while(this.stack1.length) {
+      let popValue = this.stack1.peek();
+      this.stack1.pop();
+      this.stack2.push(popValue);
+    }
+    
+    let popperValue = this.stack2.peek();
+    this.stack2.pop();
+    
+    while(this.stack2.length) {
+      let popValue = this.stack2.peek();
+      this.stack2.pop();
+      this.stack1.push(popValue);
+    }
+    
+    return popperValue;
+  }
+  
+  peek(){
+        while(this.stack1.length) {
+      let popValue = this.stack1.peek();
+      this.stack1.pop();
+      this.stack2.push(popValue);
+    }
+    
+    let peekValue = this.stack2.peek();
+
+    while(this.stack2.length) {
+      let popValue = this.stack2.peek();
+      this.stack2.pop();
+      this.stack1.push(popValue);
+    }
+    
+    return peekValue;
+  }
+  
+  isEmpty() {
+    return this.size === 0;
+  }
+  
+  
+}
+
+class SortStack {
+  constructor() {
+    this.stack = new Stack();
+    this.tempStack = new Stack();
+  }
+  
+  
+  push(value) {
+    while(value > this.stack.peek() && this.stack.size() !== 0) {
+      let popValue = this.stack.peek();
+      this.stack.pop();
+      this.tempStack.push(popValue);
+    }
+    
+    this.stack.push(value);
+    
+    while(this.tempStack.size() !== 0) {
+      let popValue = this.tempStack.peek();
+      this.tempStack.pop();
+      this.stack.push(popValue);
+    }
+  }
+  
+  pop() {
+    return this.stack.pop();
+  }
+  
+  peek() {
+    return this.stack.peek();
+  }
+  
+  isEmpty() {
+    this.stack.size() === 0;
+  }
+}
+
+class AnimalShelter {
+  constructor() {
+    this.dogQueue = new Queue();
+    this.catQueue = new Queue();
+
+  }
+
+  enqueue(animal){
+    animal.time = new Date ();
+    if(animal.type === dog) {    
+      dogQueue.add(animal);
+    } else {
+      catQueue.add(animal);
+    }
+
+  }
+
+  dequeueAny() {
+    if(dogQueue.size() > 0 && dogQueue.peek().time > catQueue.peek().time) {
+      return dogQueue.remove();
+    } else {
+      return catQueue.remove();
+    }
+
+  }
+
+  dequeueDog() {
+    return dogQueue.remove();
+  }
+
+  dequeueCat() {
+    return catQueue.remove();
+  }
+}
