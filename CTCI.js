@@ -898,3 +898,120 @@ class AnimalShelter {
     return catQueue.remove();
   }
 }
+
+// Chapter 4 Trees and Graphs
+
+
+// Instantiate a new graph
+var Graph = function() {
+  this.graph = {};
+};
+
+// Add a node to the graph, passing in the node's value.
+Graph.prototype.addNode = function(node) {
+  this.graph[node] = [];
+};
+
+// Return a boolean value indicating if the value passed to contains is represented in the graph.
+Graph.prototype.contains = function(node) {
+  if(this.graph[node]) {
+    return true;
+  }
+  return false;
+};
+
+// Removes a node from the graph.
+Graph.prototype.removeNode = function(node) {
+  if(this.graph[node]) {
+    for(let i = 0; i < this.graph[node].length; i++) {
+      this.removeEdge(node, this.graph[node][i]);
+    }
+    delete this.graph[node];
+  }
+ 
+};
+
+// Returns a boolean indicating whether two specified nodes are connected.  Pass in the values contained in each of the two nodes.
+Graph.prototype.hasEdge = function(fromNode, toNode) {
+  for(let i = 0; i < this.graph[fromNode].length; i++) {
+    if(this.graph[fromNode][i] === toNode) {
+      return true;
+    }
+  }
+  return false;
+};
+
+// Connects two nodes in a graph by adding an edge between them.
+Graph.prototype.addEdge = function(fromNode, toNode) {
+  if(this.graph[fromNode]) {
+    this.graph[fromNode].push(toNode);
+  }
+
+   if(this.graph[toNode]) {
+    this.graph[toNode].push(fromNode);
+  }
+};
+
+Graph.prototype.printGraph = function() {
+  console.log(this.graph);
+  return;
+};
+
+// Remove an edge between any two specified (by value) nodes.
+Graph.prototype.removeEdge = function(fromNode, toNode) {
+  for(let i = 0; i < this.graph[fromNode].length; i++) {
+    if(this.graph[fromNode][i] === toNode) {
+      console.log('here');
+      this.graph[fromNode].splice(i, 1);
+      console.log(this.graph);
+    }
+  }
+
+  for(let j = 0; j < this.graph[toNode].length; j++) {
+    if(this.graph[toNode][j] === fromNode) {
+      this.graph[toNode].splice(j, 1);
+    }
+  }
+};
+
+// Pass in a callback which will be executed on each node of the graph.
+Graph.prototype.forEachNode = function(cb) {
+  let allNodes = Object.keys(this.graph);
+
+  for (let i = 0; i < allNodes.length; i++) {
+    cb(allNodes[i]);
+  }
+};
+
+Graph.prototype.routeBetweenNodes = function(nodeOne, nodeTwo) {
+  let visitedNodes = {};
+  
+  let queueOne = [nodeOne];
+  let queueTwo = [nodeTwo];
+  //might have to  break this part into two parts and use || if not undirected graph
+  while(queueOne.length !== 0 && queueTwo.length !== 0) {
+    let currentNodeOne = queueOne.pop();
+    let currentNodeTwo = queueTwo.pop();
+   
+    if(!visitedNodes[currentNodeOne] && !visitedNodes[currentNodeTwo]) {
+      visitedNodes[currentNodeOne] = true;
+      visitedNodes[currentNodeTwo] = true;
+    } else {
+      return true;
+    }
+    
+    for(let i = 0; i < this.graph[currentNodeOne].length; i++) {
+      queueOne.push(this.graph[currentNodeOne][i]);
+    }
+    
+    for(let j = 0; j < this.graph[currentNodeTwo].length; j++) {
+      queueTwo.push(this.graph[currentNodeTwo][j]);
+    }
+  }
+  
+  return false;
+};
+
+
+
+
