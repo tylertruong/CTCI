@@ -1148,5 +1148,40 @@ let pointerMinimalTree = (sortedArray) => {
 
 }
 
+let listOfDepths = (root) => {
+  let linkedLists = [];
+  let currentLinkedList;
+  let currentRow = 1;
+  let nextRow = 0;
+
+  let queue = [root];
+
+  while (queue.length !== 0) {
+    let currentNode = queue.pop();
+    currentRow--;
+
+    if (currentlinkedList) {
+      currentLinkedList.addNode(currentNode);
+    } else {
+      currentLinkedList = new LinkedList(curretNode);
+    }
+
+    if (currentNode.left) {
+      nextRow++;
+      queue.unshift(currentNode.left);
+    }
+    if (currentNode.right) {
+      nextRow++;
+      queue.unshift(currentNode.right);
+    }
+
+    if(currentRow === 0) {
+      currentRow = nextRow;
+      nextRow = 0;
+    }
+  }
+
+}
+
 
 
