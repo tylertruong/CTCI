@@ -1012,6 +1012,141 @@ Graph.prototype.routeBetweenNodes = function(nodeOne, nodeTwo) {
   return false;
 };
 
+var BinarySearchTree = function(value) {
+
+  let instance = Object.create(BinarySearchTree.prototype);
+  instance.value = value;
+  return instance;
+
+};
+
+BinarySearchTree.prototype.insert = function(value) {
+  if (this.value > value) {
+    if (this.left) {
+      this.left.insert(value);
+    } else {
+      this.left = BinarySearchTree(value); 
+    }
+  } else {
+    if (this.right) {
+      this.right.insert(value);
+    } else {
+      this.right = BinarySearchTree(value)
+    }
+  }
+  return;
+}
+
+BinarySearchTree.prototype.contains = function(value) {
+  if (this.value === value) {
+    return true;
+  } else if (this.value > value) {
+    if (this.left) {
+      return this.left.contains(value);
+    } else {
+      return false;
+    }
+  } else {
+    if (this.right) {
+      return this.right.contains(value);
+    } else {
+      return false;
+    }
+  }
+}
+
+BinarySearchTree.prototype.depthFirstLog = function(callback) {
+   callback(this.value);
+    if (this.left) {
+     this.left.depthFirstLog(callback);
+   }
+
+   if (this.right) {
+     this.right.depthFirstLog(callback);
+   }
+
+
+   return;
+}
+
+BinarySearchTree.prototype.breadthFirstLog = function(callback) {
+
+   let queue = [this];
+   while (queue.length !== 0) {
+     let currentNode = queue.pop();
+     callback(currentNode.value);
+
+     if (currentNode.left) {
+      queue.unshift(currentNode.left);
+     }
+
+     if (currentNode.right) {
+      queue.unshift(currentNode.right);
+     }
+   }
+}
+
+let BST = new BinarySearchTree();
+
+let minimalTree = (sortedArray) => {
+let BST;
+let elementsAdded = 0;
+
+  let addElements = (array) => {
+
+    if(array.length === 1) {
+      BST.insert(array[0]);
+      return;
+    } else if (array.length === 0) {
+      return;
+    }
+
+    let middleElement = Math.floor((array.length - 1)/2);
+    if (!BST) {
+      BST = new BinarySearchTree(array[middleElement])
+    } else {
+    BST.insert(array[middleElement]);
+    }
+    
+    addElements(array.slice(0, middleElement));
+    addElements(array.slice(middleElement + 1, array.length))
+  }
+  addElements(sortedArray);
+  return BST;
+
+
+};
+
+let pointerMinimalTree = (sortedArray) => {
+  let BST;
+
+  let addElements = (currentMin, currentMax) => {
+    if(currentMin > currentMax) {
+      return;
+    } else if (currentMin === currentMax) {
+      BST.insert(sortedArray[currentMin]);
+      return;
+    }
+    
+    let mid = Math.floor((currentMax + currentMin) / 2);
+    if (!BST) {
+      BST = new BinarySearchTree(sortedArray[mid])
+    } else {
+      BST.insert(sortedArray[mid]);
+    }
+    let leftMin = currentMin;
+    let leftMax = mid - 1;
+    let rightMin = mid + 1;
+    let rightMax = currentMax;
+    console.log(leftMin, leftMax, rightMin, rightMax);
+    addElements(leftMin, leftMax);
+    addElements(rightMin, rightMax)
+  }
+  addElements(0, sortedArray.length - 1);
+  return BST;
+
+
+}
 
 
 
