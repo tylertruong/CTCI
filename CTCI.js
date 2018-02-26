@@ -1183,5 +1183,25 @@ let listOfDepths = (root) => {
 
 }
 
+//see leetcode for other problems;
+
+let successor = (node) => {
+  if(node.right) {
+    
+    let current = node.right;
+    while(current.left !== null) {
+      current = current.left;
+    }
+  } else {
+    let current = node;
+    let parent = node.parent;
+    while(parent !== null && parent.left !== current) {
+      current = parent;
+      parent = parent.parent;
+    }
+
+    return parent;
+  }
+}
 
 
