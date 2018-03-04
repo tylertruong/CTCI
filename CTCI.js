@@ -1206,5 +1206,121 @@ let successor = (node) => {
 
 // did course schedule rather than build order
 
+let magicIndex = (array, start=0, end=array.length-1) => {
+  if(start > end) {
+    return -1;
+  }
+  
+  let midpoint = Math.floor((start + end) / 2);
+  
+  if (array[midpoint] === midpoint) {
+    return midpoint;
+  } else if (array[midpoint] < midpoint) {
+    return magicIndex(array, midpoint + 1, end);
+  } else {
+    return magicIndex(array, start, midpoint - 1);
+  }
+  
+}
 
+let magicIndexDup = (array, start=0, end=array.length-1) => {
+  if(start > end) {
+    return -1;
+  }
+  
+  let midpoint = Math.floor((start + end) / 2);
+  
+  if (array[midpoint] === midpoint) {
+    return midpoint;
+  }
+  
+  
+    let left = magicIndex(array, Math.max(midpoint + 1, array[midpoint]), end);
+    if(left >= 0) {
+      // we found it cause its > -1
+      return left;
+    }
 
+    let right = magicIndex(array, start, Math.min(midpoint - 1, array[midpoint]));
+    return right;
+
+  
+}
+
+var subsets = function(nums) {
+    let results = [];
+    
+    const findSubsets = (array, build) => {
+          results.push(build);
+
+        if(array.length === 0) {
+            return;
+        }
+        
+        for(let i = 0; i < array.length; i++) {
+            findSubsets(array.slice(i + 1), build.concat(array[i]))
+        }
+        
+        
+    }
+    findSubsets(nums, []);
+    return results;
+};
+
+const rMultiply = (num1, num2) => {
+  let product = 0;
+  while (num2 > 0) {
+    product += num1;
+    num2--;
+  }
+  
+  return product;
+}
+
+const rMultiply = (num1, num2) => {
+  if(num2 === 1) {
+    return num1;
+  } else if (num2 === 0) {
+    return 0;
+  }
+
+  return rMultiply(num1, Math.floor(num2/2)) + rMultiply(num1, Math.ceil(num2/2));
+}
+
+let memo = {};
+const rMultiply = (num1, num2) => {
+  if(num1 === 0 || num2 === 0) {
+    return 0;
+  }
+  if(num2 === 1) {
+    return num1;
+  } 
+  
+  if(memo[`${num1},${Math.floor(num2/2)}`] === undefined) {
+    memo[`${num1},${Math.floor(num2/2)}`] = rMultiply(num1, Math.floor(num2/2));
+  }
+  
+  if(memo[`${num1},${Math.ceil(num2/2)}`] === undefined) {
+    memo[`${num1},${Math.ceil(num2/2)}`] = rMultiply(num1, Math.ceil(num2/2));
+  }
+  
+  return memo[`${num1},${Math.floor(num2/2)}`] + memo[`${num1},${Math.ceil(num2/2)}`];
+}
+
+const rMultiply = (num1, num2) => {
+  if(num1 === 0 || num2 === 0) {
+    return 0;
+  }
+  if(num2 === 1) {
+    return num1;
+  } 
+  
+  let value = rMultiply(num1, Math.floor(num2/2));
+  
+  let odd = 0;
+  if (num2 % 2 === 1) {
+    odd = num1;
+  }
+
+  return value + value + odd;
+}
