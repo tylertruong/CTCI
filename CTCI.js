@@ -1324,3 +1324,19 @@ const rMultiply = (num1, num2) => {
 
   return value + value + odd;
 }
+
+var solveHanoi = function(numDisks, fromPeg, toPeg) {
+    // base case:  no disks to move
+    if(numDisks === 0) {
+        return;
+    }
+    // recursive case:
+    var sparePeg = hanoi.getSparePeg(fromPeg, toPeg);
+    solveHanoi(numDisks - 1, fromPeg, sparePeg);
+    hanoi.moveDisk(fromPeg, toPeg);
+    solveHanoi(numDisks - 1, sparePeg, toPeg);
+};
+
+solveHanoi(5, "A", "B");
+Program.assertEqual(hanoi.isSolved("B"),true);
+
