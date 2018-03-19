@@ -1340,3 +1340,77 @@ var solveHanoi = function(numDisks, fromPeg, toPeg) {
 solveHanoi(5, "A", "B");
 Program.assertEqual(hanoi.isSolved("B"),true);
 
+const coinSum = (coinAmount) => {
+  let coins = [25, 10, 5, 1];
+  let count = 0;
+  
+  const find = (amount, index) => {
+    if (amount === 0) {
+      count++;
+    }
+    for(let i = index; i < coins.length; i++) {
+      if (amount >= coins[i]) {
+          find(amount - coins[i], i);
+      }
+    }
+  }
+  find(coinAmount, 0);
+
+return count;
+}
+
+const coinSum = (coinAmount) => {
+  let coins = [25, 10, 5, 1];
+  let hash = {};
+  
+  const find = (amount, index) => {
+    if(hash[amount] && hash[amount][index]) {
+      return hash[amount][index];
+    } else if (hash[amount] === undefined) {
+      hash[amount] = {};
+    }
+    
+    if (amount === 0) {
+      return 1;
+    } else if (amount < 0) {
+      return 0;
+    }
+    
+    let ways = 0;
+    for(let i = index; i < coins.length; i++) {
+      if (amount >= coins[i]) {
+          ways += find(amount - coins[i], i);
+      }
+    }
+    hash[amount][index] = ways;
+    return hash[amount][index];
+  }
+  return find(coinAmount, 0);
+
+}
+
+const sortValleyPeak = (array) => {
+  for (let i = 0; i < array.length; i+=2) {
+    let biggestIndex = maxIndex(array, i - 1, i, i + 1);
+    if(i !== biggestIndex){
+      [array[i], array[biggestIndex]] = [array[biggestIndex], array[i]];
+    }
+  }
+  return array;
+}
+
+const maxIndex = (array, a, b, c) => {
+  let aValue = a >= 0 && a < array.length ? array[a] : Number.NEGATIVE_INFINITY;
+  let bValue = b >= 0 && b < array.length ? array[b] : Number.NEGATIVE_INFINITY;
+  let cValue = c >= 0 && c < array.length ? array[c] : Number.NEGATIVE_INFINITY;
+  
+  let max = Math.max(aValue, Math.max(bValue, cValue));
+  
+  if(aValue === max) {
+    return a;
+  } else if (bValue === max) {
+    return b;
+  } else {
+    return c;
+  }
+}
